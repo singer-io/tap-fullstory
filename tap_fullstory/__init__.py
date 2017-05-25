@@ -66,8 +66,8 @@ def request(endpoint, params=None):
     if 'user_agent' in CONFIG:
         headers['User-Agent'] = CONFIG['user_agent']
 
-    auth = (CONFIG['api_key'], "")
-    req = requests.Request("GET", url, params=params, auth=auth, headers=headers).prepare()
+    headers['Authorization'] = "Basic " + CONFIG['api_key']
+    req = requests.Request("GET", url, params=params, headers=headers).prepare()
     LOGGER.info("GET {}".format(req.url))
 
     with singer.stats.Timer(source=parse_source_from_url(endpoint)) as stats:
