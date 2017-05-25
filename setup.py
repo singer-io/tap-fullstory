@@ -2,13 +2,13 @@
 
 from setuptools import setup, find_packages
 
-setup(name='tap-closeio',
-      version='0.6.2',
-      description='Singer.io tap for extracting data from the CloseIO API',
+setup(name='tap-fullstory',
+      version='0.1',
+      description='Singer.io tap for extracting data from the FullStory API',
       author='Stitch',
       url='http://singer.io',
       classifiers=['Programming Language :: Python :: 3 :: Only'],
-      py_modules=['tap_closeio'],
+      py_modules=['tap_fullstory'],
       install_requires=[
           'singer-python==1.6.0a2',
           'requests==2.12.4',
@@ -16,13 +16,12 @@ setup(name='tap-closeio',
       ],
       entry_points='''
           [console_scripts]
-          tap-closeio=tap_closeio:main
+          tap-fullstory=tap_fullstory:main
       ''',
-      packages=['tap_closeio'],
+      packages=['tap_fullstory'],
       package_data = {
-          'tap_closeio/schemas': [
-              'leads.json',
-              'activities.json'
+          'tap_fullstory/schemas': [
+              'events.json'
           ]
       },
       include_package_data=True,

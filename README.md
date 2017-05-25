@@ -1,13 +1,11 @@
-# tap-close-io
+# tap-fullstory
 
 This is a [Singer](https://singer.io) tap that produces JSON-formatted data following the [Singer spec](https://github.com/singer-io/getting-started/blob/master/SPEC.md).
 
 This tap:
-- Pulls raw data from Close.io's [REST API](https://developer.close.io/)
-- Extracts the following resources from Close.io:
-  - [Activities](https://developer.close.io/#activities)
-  - [Leads](https://developer.close.io/#leads)
-- Outputs the schema for each resource
+- Pulls data export packs from FullStory's [Data Export REST API](http://help.fullstory.com/develop-rest/data-export-api)
+- Extracts [Events](http://help.fullstory.com/technical-questions/data-export) from the data export packs
+- Outputs the schema
 - Incrementally pulls data based on the input state
 
 
@@ -16,12 +14,12 @@ This tap:
 1. Install
 
     ```bash
-    > pip install tap-closeio
+    > pip install tap-fullstory
     ```
 
-2. Get your Close.io API Key
+2. Get your FullStory API Key
 
-    Login to your Close.io account, navigate to your account settings and "Your API Keys". Generate a New API Key, you'll need it for the next step.
+    Login to your FullStory account, navigate to your account settings and "Integrations & API Keys". Copy your API key, you'll need it for the next step.
 
 3. Create the config file
 
@@ -35,19 +33,18 @@ This tap:
 
     You can provide JSON file that contains a date for the API endpoints
     to force the application to only fetch data newer than those dates.
-    If you omit the file it will fetch all Close.io data
+    If you omit the file it will fetch all FullStory data
 
     ```json
-    {"activities": "2017-01-17T20:32:05Z",
-     "leads": "2017-01-17T20:32:05Z"}
+    { "events": "2017-01-17T20:32:05Z" }
     ```
 
 5. Run the application
 
-    `tap-closeio` can be run with:
+    `tap-fullstory` can be run with:
 
     ```bash
-    tap-closeio --config config.json [--state state.json]
+    tap-fullstory --config config.json [--state state.json]
     ```
 
 ---

@@ -15,7 +15,7 @@ from singer import utils
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 PER_PAGE = 100
-BASE_URL = "https://app.close.io/api/v1/"
+BASE_URL = "https://www.fullstory.com/api/v1/"
 
 CONFIG = {}
 STATE = {}

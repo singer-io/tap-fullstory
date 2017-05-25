@@ -8,4 +8,4 @@ dependencies:
 
 test:
   post:
-    - pylint tap_closeio --disable missing-docstring,logging-format-interpolation,too-many-locals,too-many-arguments
+    - pylint tap_fullstory --disable missing-docstring,logging-format-interpolation,too-many-locals,too-many-arguments
