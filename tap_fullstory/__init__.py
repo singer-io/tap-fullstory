@@ -4,6 +4,7 @@ import os
 import time
 import re
 
+import json
 import backoff
 import pendulum
 import requests
@@ -75,6 +76,18 @@ def request(endpoint, params=None):
     with singer.stats.Timer(source=parse_source_from_url(endpoint)) as stats:
         resp = SESSION.send(req)
         stats.http_status_code = resp.status_code
+        if resp.headers.get('Content-Type') == "application/gzip":
+            with tempfile.TemporaryFile() as temp_file:
+                temp_file.write(resp.content)
+                temp_file.seek(0)
+                with gzip.open(temp_file) as unzipped_file:
+                    body = unzipped_file.read().decode()
+                    json_body = json.loads(body)
+                    stats.record_count = len(json_body)
+        else:
+            json_body = resp.json()
+            if 'data' in json_body:
+                stats.record_count = len(json_body['data'])
 
     # if we're hitting the rate limit cap, sleep until the limit resets
     if resp.headers.get('X-Rate-Limit-Remaining') == "0":
@@ -88,7 +101,7 @@ def request(endpoint, params=None):
 
     resp.raise_for_status()
 
-    return resp
+    return json_body
 
 
 def request_export_bundles():
@@ -96,8 +109,7 @@ def request_export_bundles():
     fs_max_results_per_page = 20
     while True:
         params["start"] = get_start("events")
-        response = request("list", params)
-        body = response.json()
+        body = request("list", params)
         for row in body['exports']:
             yield row
 
@@ -111,13 +123,7 @@ def transform_event(event):
 
 def download_events(file_id):
     params = {"id": file_id}
-    stream = request("get", params)
-
-    with tempfile.TemporaryFile() as temp_file:
-        temp_file.write(stream.content)
-        temp_file.seek(0)
-        with gzip.open(temp_file) as unzipped_file:
-            body = unzipped_file.read()
+    body = request("get", params)
     return body
 
 
@@ -129,8 +135,10 @@ def sync_events():
     list_params = {"start": start}
 
     for export_bundle in request_export_bundles():
-        temp = download_events(export_bundle['Id'])
-        print(temp)
+        events = download_events(export_bundle['Id'])
+        # print(bundle_body)
+
+        print(len(events))
         # body = unzip_events_file(temp)
         # print(body)
         # temp.close()
