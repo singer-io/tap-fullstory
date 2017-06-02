@@ -8,6 +8,8 @@ import backoff
 import pendulum
 import requests
 import dateutil.parser
+import tempfile
+import gzip
 import singer
 import singer.stats
 from singer import utils
@@ -15,7 +17,7 @@ from singer import utils
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 PER_PAGE = 100
-BASE_URL = "https://www.fullstory.com/api/v1/"
+BASE_URL = "https://www.fullstory.com/api/v1/export/"
 
 CONFIG = {}
 STATE = {}
@@ -73,9 +75,6 @@ def request(endpoint, params=None):
     with singer.stats.Timer(source=parse_source_from_url(endpoint)) as stats:
         resp = SESSION.send(req)
         stats.http_status_code = resp.status_code
-        json = resp.json()
-        if 'data' in json:
-            stats.record_count = len(json['data'])
 
     # if we're hitting the rate limit cap, sleep until the limit resets
     if resp.headers.get('X-Rate-Limit-Remaining') == "0":
@@ -84,54 +83,64 @@ def request(endpoint, params=None):
     # if we're already over the limit, we'll get a 429
     # sleep for the rate_reset seconds and then retry
     if resp.status_code == 429:
-        time.sleep(json["rate_reset"])
+        time.sleep(resp.json()["rate_reset"])
         return request(endpoint, params)
 
     resp.raise_for_status()
 
-    return json
+    return resp
 
 
-def gen_request(endpoint, params=None):
-    params = params or {}
-    params['_limit'] = PER_PAGE
-    params['_skip'] = 0
-
+def request_export_bundles():
+    params = {}
+    fs_max_results_per_page = 20
     while True:
-        body = request(endpoint, params)
-        for row in body['data']:
+        params["start"] = get_start("events")
+        response = request("list", params)
+        body = response.json()
+        for row in body['exports']:
             yield row
 
-        if not body.get("has_more"):
+        if len(body["exports"]) < fs_max_results_per_page:
             break
 
-        params['_skip'] += PER_PAGE
+
+def transform_event(event):
+    transform_datetimes(event, ["EventStart"])
 
 
-def transform_activity(activity):
-    transform_datetimes(activity, ["date_scheduled"])
-    if "envelope" in activity:
-        transform_datetimes(activity["envelope"], ["date"])
+def download_events(file_id):
+    params = {"id": file_id}
+    stream = request("get", params)
 
-    if "send_attempts" in activity:
-        for item in activity["send_attempts"]:
-            transform_datetimes(item, ["date"])
+    with tempfile.TemporaryFile() as temp_file:
+        temp_file.write(stream.content)
+        temp_file.seek(0)
+        with gzip.open(temp_file) as unzipped_file:
+            body = unzipped_file.read()
+    return body
 
 
-def sync_activities():
-    schema = load_schema("activities")
-    singer.write_schema("activities", schema, ["id"])
+def sync_events():
+    schema = load_schema("events")
+    singer.write_schema("events", schema, ["id"])
 
-    start = get_start("activities")
-    params = {"date_created__gt": start}
+    start = get_start("events")
+    list_params = {"start": start}
 
-    for row in gen_request("activity/", params):
-        transform_activity(row)
-        if row['date_created'] >= start:
-            singer.write_record("activities", row)
-            utils.update_state(STATE, "activities", dateutil.parser.parse(row['date_created']))
+    for export_bundle in request_export_bundles():
+        temp = download_events(export_bundle['Id'])
+        print(temp)
+        # body = unzip_events_file(temp)
+        # print(body)
+        # temp.close()
+        break
+    #     transform_event(row)
+    #     if row['date_created'] >= start:
+    #         singer.write_record("events", row)
+    #         utils.update_state(STATE, "events", dateutil.parser.parse(row['date_created']))
 
-    singer.write_state(STATE)
+    # singer.write_state(STATE)
 
 
 def to_json_type(typ):
@@ -144,57 +153,9 @@ def to_json_type(typ):
     return {"type": ["null", "string"]}
 
 
-def get_custom_leads_schema():
-    return {
-        "type": "object",
-        "properties": {row["name"]: to_json_type(row["type"])
-                       for row in gen_request("custom_fields/lead/")},
-    }
-
-
-def transform_lead(lead, custom_schema):
-    if "tasks" in lead:
-        for item in lead["tasks"]:
-            transform_datetimes(item, ["date", "due_date"])
-
-    if "opportunities" in lead:
-        for item in lead["opportunities"]:
-            transform_datetimes(item, ["date_won"])
-
-    if "custom" in lead:
-        custom_datetimes = [k for k, v in custom_schema["properties"].items()
-                            if v.get("format") == "date-time"]
-        transform_datetimes(lead["custom"], custom_datetimes)
-
-
-def sync_leads():
-    schema = load_schema("leads")
-    custom_schema = get_custom_leads_schema()
-    schema["properties"]["custom"] = custom_schema
-    singer.write_schema("leads", schema, ["id"])
-
-    start = get_start("leads")
-    formatted_start = dateutil.parser.parse(start).strftime("%Y-%m-%d %H:%M")
-    params = {'query': 'date_updated>="{}" sort:date_updated'.format(formatted_start)}
-
-    for i, row in enumerate(gen_request("lead/", params)):
-        transform_lead(row, custom_schema)
-        row['contacts'] = [request("contact/{}/".format(contact['id']))
-                           for contact in row['contacts']]
-        if row['date_updated'] >= start:
-            singer.write_record("leads", row)
-            utils.update_state(STATE, "leads", dateutil.parser.parse(row['date_updated']))
-
-        if i % PER_PAGE == 0:
-            singer.write_state(STATE)
-
-    singer.write_state(STATE)
-
-
 def do_sync():
     LOGGER.info("Starting sync")
-    sync_activities()
-    sync_leads()
+    sync_events()
     LOGGER.info("Completed sync")
 
 
