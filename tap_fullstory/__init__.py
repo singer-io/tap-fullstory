@@ -8,6 +8,7 @@ import json
 import backoff
 import pendulum
 import requests
+import datetime
 import dateutil.parser
 import tempfile
 import gzip
@@ -135,20 +136,11 @@ def sync_events():
     list_params = {"start": start}
 
     for export_bundle in request_export_bundles():
-        events = download_events(export_bundle['Id'])
-        # print(bundle_body)
-
-        print(len(events))
-        # body = unzip_events_file(temp)
-        # print(body)
-        # temp.close()
-        break
-    #     transform_event(row)
-    #     if row['date_created'] >= start:
-    #         singer.write_record("events", row)
-    #         utils.update_state(STATE, "events", dateutil.parser.parse(row['date_created']))
-
-    # singer.write_state(STATE)
+        for event in download_events(export_bundle['Id']):
+            transform_event(event)
+            singer.write_record("events", event)
+        utils.update_state(STATE, "events", datetime.datetime.utcfromtimestamp(export_bundle['Stop']))
+    singer.write_state(STATE)
 
 
 def to_json_type(typ):
