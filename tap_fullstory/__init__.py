@@ -52,7 +52,7 @@ def get_start(key):
     if key not in STATE:
         STATE[key] = CONFIG['start_date']
 
-    return STATE[key]
+    return int(pendulum.parse(STATE[key]).timestamp())
 
 
 def parse_source_from_url(url):
