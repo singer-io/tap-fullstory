@@ -145,17 +145,6 @@ def sync_events():
         utils.update_state(STATE, "events", datetime.datetime.utcfromtimestamp(export_bundle['Stop']))
     singer.write_state(STATE)
 
-
-def to_json_type(typ):
-    if typ in ["datetime", "date"]:
-        return {"type": ["null", "string"], "format": "date-time"}
-
-    if typ == "number":
-        return {"type": ["null", "number"]}
-
-    return {"type": ["null", "string"]}
-
-
 def do_sync():
     LOGGER.info("Starting sync")
     sync_events()
