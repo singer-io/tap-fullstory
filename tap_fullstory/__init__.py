@@ -143,7 +143,7 @@ def sync_events():
             transform_event(event)
             singer.write_record("events", event)
         utils.update_state(STATE, "events", datetime.datetime.utcfromtimestamp(export_bundle['Stop']))
-    singer.write_state(STATE)
+        singer.write_state(STATE)
 
 def do_sync():
     LOGGER.info("Starting sync")
