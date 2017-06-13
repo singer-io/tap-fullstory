@@ -133,7 +133,7 @@ def download_events(file_id):
 
 def sync_events():
     schema = load_schema("events")
-    singer.write_schema("events", schema, ["id"])
+    singer.write_schema("events", schema, ["IndvId"])
 
     start = get_start("events")
     list_params = {"start": start}
