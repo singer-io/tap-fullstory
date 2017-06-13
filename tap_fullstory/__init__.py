@@ -63,6 +63,14 @@ def parse_source_from_url(url):
         return match.group(1)
 
 
+def unzip_to_json(content):
+    with tempfile.TemporaryFile() as temp_file:
+        temp_file.write(content)
+        temp_file.seek(0)
+        with gzip.open(temp_file) as unzipped_file:
+            body = unzipped_file.read().decode()
+            return json.loads(body)
+
 def request(endpoint, params=None):
     url = BASE_URL + endpoint
     params = params or {}
@@ -78,13 +86,8 @@ def request(endpoint, params=None):
         resp = SESSION.send(req)
         stats.http_status_code = resp.status_code
         if resp.headers.get('Content-Type') == "application/gzip":
-            with tempfile.TemporaryFile() as temp_file:
-                temp_file.write(resp.content)
-                temp_file.seek(0)
-                with gzip.open(temp_file) as unzipped_file:
-                    body = unzipped_file.read().decode()
-                    json_body = json.loads(body)
-                    stats.record_count = len(json_body)
+            json_body = unzip_to_json(resp.content)
+            stats.record_count = len(json_body)
         else:
             json_body = resp.json()
             if 'data' in json_body:
