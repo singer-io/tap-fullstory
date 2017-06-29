@@ -6,13 +6,12 @@ import re
 import io
 
 import json
-import backoff
-import pendulum
-import requests
 import datetime
-import dateutil.parser
-import tempfile
 import gzip
+import dateutil.parser
+import requests
+import pendulum
+import backoff
 import singer
 import singer.stats
 from singer import utils
@@ -35,11 +34,11 @@ def get_abs_path(path):
 def load_schema(entity):
     return utils.load_json(get_abs_path("schemas/{}.json".format(entity)))
 
-def transform_datetime(datetime):
-    if datetime is None:
+def transform_datetime(datetime_string):
+    if datetime_string is None:
         return None
 
-    return pendulum.parse(datetime).format(utils.DATETIME_FMT)
+    return pendulum.parse(datetime_string).format(utils.DATETIME_FMT)
 
 
 def transform_datetimes(item, datetime_fields):
@@ -147,14 +146,12 @@ def sync_events():
     schema = load_schema("events")
     singer.write_schema("events", schema, [])
 
-    start = get_start("events")
-    list_params = {"start": start}
-
     for export_bundle in request_export_bundles():
         for event in download_events(export_bundle['Id']):
             transform_event(event)
             singer.write_record("events", event)
-        utils.update_state(STATE, "events", datetime.datetime.utcfromtimestamp(export_bundle['Stop']))
+        stop_timestamp = datetime.datetime.utcfromtimestamp(export_bundle['Stop'])
+        utils.update_state(STATE, "events", stop_timestamp)
         singer.write_state(STATE)
 
 def do_sync():
