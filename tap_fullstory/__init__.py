@@ -3,6 +3,7 @@
 import os
 import time
 import re
+import io
 
 import json
 import backoff
@@ -64,12 +65,10 @@ def parse_source_from_url(url):
 
 
 def unzip_to_json(content):
-    with tempfile.TemporaryFile() as temp_file:
-        temp_file.write(content)
-        temp_file.seek(0)
-        with gzip.open(temp_file) as unzipped_file:
-            body = unzipped_file.read().decode()
-            return json.loads(body)
+    content_io = io.BytesIO(content)
+    content_gz = gzip.GzipFile(fileobj=content_io, mode='rb')
+    decoded = content_gz.read()
+    return json.loads(decoded)
 
 def request(endpoint, params=None):
     url = BASE_URL + endpoint
