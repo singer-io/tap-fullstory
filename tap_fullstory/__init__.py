@@ -70,6 +70,29 @@ def unzip_to_json(content):
     decoded = content_gz.read()
     return json.loads(decoded)
 
+
+def giveup(exc):
+    return exc.response is not None \
+        and 400 <= exc.response.status_code < 500 \
+        and exc.response.status_code != 429
+
+def on_giveup(details):
+    if len(details['args']) == 2:
+        url, params = details['args']
+    else:
+        url = details['args']
+        params = {}
+
+    raise Exception("Giving up on request after {} tries with url {} and params {}" \
+                    .format(details['tries'], url, params))
+
+@backoff.on_exception(backoff.expo,
+                      requests.exceptions.RequestException,
+                      max_tries=5,
+                      giveup=giveup,
+                      on_giveup=on_giveup,
+                      factor=2)
+@utils.ratelimit(9, 1)
 def request(endpoint, params=None):
     url = BASE_URL + endpoint
     params = params or {}
@@ -91,16 +114,6 @@ def request(endpoint, params=None):
             json_body = resp.json()
             if 'data' in json_body:
                 stats.record_count = len(json_body['data'])
-
-    # if we're hitting the rate limit cap, sleep until the limit resets
-    if resp.headers.get('X-Rate-Limit-Remaining') == "0":
-        time.sleep(int(resp.headers['X-Rate-Limit-Reset']))
-
-    # if we're already over the limit, we'll get a 429
-    # sleep for the rate_reset seconds and then retry
-    if resp.status_code == 429:
-        time.sleep(resp.json()["rate_reset"])
-        return request(endpoint, params)
 
     resp.raise_for_status()
 
