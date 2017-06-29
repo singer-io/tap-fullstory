@@ -3,10 +3,10 @@
 This is a [Singer](https://singer.io) tap that produces JSON-formatted data following the [Singer spec](https://github.com/singer-io/getting-started/blob/master/SPEC.md).
 
 This tap:
-- Pulls data export packs from FullStory's [Data Export REST API](http://help.fullstory.com/develop-rest/data-export-api)
-- Extracts [Events](http://help.fullstory.com/technical-questions/data-export) from the data export packs
-- Outputs the schema
-- Incrementally pulls data based on the input state
+- Pulls data export packs from FullStory's [Data Export REST API](http://help.fullstory.com/develop-rest/data-export-api). Note: The Data Export is a paid add-on to FullStory's normal service. Contact their support team for pricing details.
+- Extracts [Events](http://help.fullstory.com/technical-questions/data-export) from the data export packs.
+- Outputs the schema.
+- Incrementally pulls data based on the input state.
 
 
 ## Quick start
