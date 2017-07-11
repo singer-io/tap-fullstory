@@ -60,7 +60,7 @@ def get_start(key):
 def unzip_to_json(content):
     content_io = io.BytesIO(content)
     content_gz = gzip.GzipFile(fileobj=content_io, mode='rb')
-    decoded = content_gz.read()
+    decoded = io.TextIOWrapper(content_gz).read()
     return json.loads(decoded)
 
 
