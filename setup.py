@@ -10,10 +10,10 @@ setup(name='tap-fullstory',
       classifiers=['Programming Language :: Python :: 3 :: Only'],
       py_modules=['tap_fullstory'],
       install_requires=[
-          'singer-python==1.6.0a2',
-          'requests>=2.12.4',
-          'backoff>=1.3.2',
-          'pendulum>=1.2.0'
+          'singer-python==1.6.0',
+          'requests==2.12.4',
+          'backoff==1.3.2',
+          'pendulum==1.2.0'
       ],
       entry_points='''
           [console_scripts]

@@ -23,23 +23,18 @@ This tap:
 
 3. Create the config file
 
-    Create a JSON file called `config.json` containing the api key you just generated.
+    Create a JSON file called `config.json` containing the api key you
+    just generated, and the timestamp of the date that you want the
+    tap to start replicating from.
 
     ```json
-    {"api_key": "your-api-token"}
+    {
+      "api_key": "your-api-token",
+      "start_date": "2017-01-01T00:00:00Z"
+    }
     ```
 
-4. [Optional] Create the initial state file
-
-    You can provide JSON file that contains a date for the API endpoints
-    to force the application to only fetch data newer than those dates.
-    If you omit the file it will fetch all FullStory data
-
-    ```json
-    { "events": "2017-01-17T20:32:05Z" }
-    ```
-
-5. Run the application
+4. Run the application
 
     `tap-fullstory` can be run with:
 

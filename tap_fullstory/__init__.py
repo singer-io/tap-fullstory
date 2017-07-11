@@ -13,7 +13,7 @@ import requests
 import pendulum
 import backoff
 import singer
-import singer.stats
+import singer.metrics as metrics
 from singer import utils
 
 
@@ -57,12 +57,6 @@ def get_start(key):
     return int(pendulum.parse(STATE[key]).timestamp())
 
 
-def parse_source_from_url(url):
-    match = re.match(r'^(\w+)\/', url)
-    if match:
-        return match.group(1)
-
-
 def unzip_to_json(content):
     content_io = io.BytesIO(content)
     content_gz = gzip.GzipFile(fileobj=content_io, mode='rb')
@@ -74,6 +68,7 @@ def giveup(exc):
     return exc.response is not None \
         and 400 <= exc.response.status_code < 500 \
         and exc.response.status_code != 429
+
 
 def on_giveup(details):
     if len(details['args']) == 2:
@@ -103,17 +98,15 @@ def request(endpoint, params=None):
     req = requests.Request("GET", url, params=params, headers=headers).prepare()
     LOGGER.info("GET {}".format(req.url))
 
-    with singer.stats.Timer(source=parse_source_from_url(endpoint)) as stats:
+    with metrics.http_request_timer(url) as timer:
         resp = SESSION.send(req)
-        stats.http_status_code = resp.status_code
-        if resp.headers.get('Content-Type') == "application/gzip":
-            json_body = unzip_to_json(resp.content)
-            stats.record_count = len(json_body)
-        else:
-            json_body = resp.json()
-            if 'data' in json_body:
-                stats.record_count = len(json_body['data'])
-
+        timer.tags[metrics.Tag.http_status_code] = resp.status_code
+        
+    if resp.headers.get('Content-Type') == "application/gzip":
+        json_body = unzip_to_json(resp.content)
+    else:
+        json_body = resp.json()
+        
     resp.raise_for_status()
 
     return json_body
@@ -147,12 +140,15 @@ def sync_events():
     singer.write_schema("events", schema, [])
 
     for export_bundle in request_export_bundles():
-        for event in download_events(export_bundle['Id']):
-            transform_event(event)
-            singer.write_record("events", event)
-        stop_timestamp = datetime.datetime.utcfromtimestamp(export_bundle['Stop'])
-        utils.update_state(STATE, "events", stop_timestamp)
-        singer.write_state(STATE)
+        with metrics.record_counter("events") as counter:
+            for event in download_events(export_bundle['Id']):
+                transform_event(event)
+                counter.increment()
+                singer.write_record("events", event)
+            stop_timestamp = datetime.datetime.utcfromtimestamp(export_bundle['Stop'])
+            utils.update_state(STATE, "events", stop_timestamp)
+            singer.write_state(STATE)
+
 
 def do_sync():
     LOGGER.info("Starting sync")
