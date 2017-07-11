@@ -101,12 +101,12 @@ def request(endpoint, params=None):
     with metrics.http_request_timer(url) as timer:
         resp = SESSION.send(req)
         timer.tags[metrics.Tag.http_status_code] = resp.status_code
-        
+
     if resp.headers.get('Content-Type') == "application/gzip":
         json_body = unzip_to_json(resp.content)
     else:
         json_body = resp.json()
-        
+
     resp.raise_for_status()
 
     return json_body
