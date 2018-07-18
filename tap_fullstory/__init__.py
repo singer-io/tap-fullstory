@@ -13,13 +13,12 @@ import requests
 import pendulum
 import backoff
 import singer
-import singer.metrics as metrics
-from singer import utils
+from singer import utils, metrics
 
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 PER_PAGE = 100
-BASE_URL = "https://www.fullstory.com/api/v1/export/"
+BASE_URL = "https://export.fullstory.com/api/v1/export/"
 
 CONFIG = {}
 STATE = {}
