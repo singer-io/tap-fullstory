@@ -13,7 +13,7 @@ import requests
 import pendulum
 import backoff
 import singer
-import singer.metrics as metrics
+import singer.metrics
 from singer import utils
 
 
