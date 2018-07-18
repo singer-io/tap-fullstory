@@ -13,8 +13,7 @@ import requests
 import pendulum
 import backoff
 import singer
-import singer.metrics
-from singer import utils
+from singer import utils, metrics
 
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
