@@ -8,6 +8,7 @@ import io
 import json
 import datetime
 import gzip
+import ijson
 import dateutil.parser
 import requests
 import pendulum
@@ -59,8 +60,7 @@ def get_start(key):
 def unzip_to_json(content):
     content_io = io.BytesIO(content)
     content_gz = gzip.GzipFile(fileobj=content_io, mode='rb')
-    decoded = io.TextIOWrapper(content_gz, encoding='utf-8').read()
-    return json.loads(decoded)
+    return ijson.items(content_gz, 'item')
 
 
 def giveup(exc):

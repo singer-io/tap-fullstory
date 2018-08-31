@@ -13,7 +13,8 @@ setup(name='tap-fullstory',
           'singer-python==1.6.0',
           'requests==2.12.4',
           'backoff==1.3.2',
-          'pendulum==1.2.0'
+          'pendulum==1.2.0',
+          'ijson==2.3'
       ],
       entry_points='''
           [console_scripts]
