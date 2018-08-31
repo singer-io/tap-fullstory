@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.2
+  * Updated JSON parsing to iterate over the response [#4](https://github.com/singer-io/tap-fullstory/pull/4)
+
 ## 1.0.1
   * Update endpoint to latest supported URL (export.fullstory.api), no functionality change [#3](https://github.com/singer-io/tap-fullstory/pull/3)
   * Migrated CircleCI config to 2.0
