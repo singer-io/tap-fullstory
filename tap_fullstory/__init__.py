@@ -6,9 +6,9 @@ import re
 import io
 
 import json
-import ijson
 import datetime
 import gzip
+import ijson
 import dateutil.parser
 import requests
 import pendulum
