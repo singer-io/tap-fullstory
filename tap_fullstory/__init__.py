@@ -81,11 +81,10 @@ def on_giveup(details):
 
 @backoff.on_exception(backoff.expo,
                       requests.exceptions.RequestException,
-                      max_tries=5,
+                      max_tries=6,
                       giveup=giveup,
                       on_giveup=on_giveup,
                       factor=2)
-@utils.ratelimit(9, 1)
 def request(endpoint, params=None):
     url = BASE_URL + endpoint
     params = params or {}
@@ -101,12 +100,12 @@ def request(endpoint, params=None):
         resp = SESSION.send(req)
         timer.tags[metrics.Tag.http_status_code] = resp.status_code
 
+    resp.raise_for_status()
+
     if resp.headers.get('Content-Type') == "application/gzip":
         json_body = unzip_to_json(resp.content)
     else:
         json_body = resp.json()
-
-    resp.raise_for_status()
 
     return json_body
 
