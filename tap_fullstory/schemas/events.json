@@ -26,6 +26,18 @@
     "EventTargetSelectorTok": {
         "type": ["null", "string"]
     },
+    "EventModFrustrated": {
+      "type": ["null", "integer"]
+    },
+    "EventModDead": {
+      "type": ["null", "integer"]
+    },
+    "EventModError": {
+      "type": ["null", "integer"]
+    },
+    "EventModSuspicious": {
+      "type": ["null", "integer"]
+    },
     "PageDuration": {
         "type": ["null", "integer"]
     },
@@ -64,6 +76,18 @@
     },
     "PageNumErrors": {
         "type": ["null", "integer"]
+    },
+    "PageClusterId": {
+      "type": ["null", "integer"]
+    },
+    "LoadDomContentTime": {
+      "type": ["null", "integer"]
+    },
+    "LoadEventTime": {
+      "type": ["null", "integer"]
+    },
+    "LoadFirstPaintTime": {
+      "type": ["null", "integer"]
     },
     "UserAppKey": {
         "type": ["null", "string"]
