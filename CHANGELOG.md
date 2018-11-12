@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.3
+  * Update version of `requests` to `0.20.0` in response to CVE 2018-18074
+
 ## 1.0.2
   * Updated JSON parsing to iterate over the response [#4](https://github.com/singer-io/tap-fullstory/pull/4)
 
