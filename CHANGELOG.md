@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.4
+  * Update version of `singer-python` to `1.9.1` to allow JSON serialisation of `Decimal` types
+
 ## 1.0.3
   * Update version of `requests` to `2.20.0` in response to CVE 2018-18074
 

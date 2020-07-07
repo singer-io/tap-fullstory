@@ -3,14 +3,14 @@
 from setuptools import setup, find_packages
 
 setup(name='tap-fullstory',
-      version='1.0.3',
+      version='1.0.4',
       description='Singer.io tap for extracting data from the FullStory API',
       author='Stitch',
       url='http://singer.io',
       classifiers=['Programming Language :: Python :: 3 :: Only'],
       py_modules=['tap_fullstory'],
       install_requires=[
-          'singer-python==1.6.0',
+          'singer-python==1.9.1',
           'requests==2.20.0',
           'backoff==1.3.2',
           'pendulum==1.2.0',
