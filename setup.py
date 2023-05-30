@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='tap-fullstory',
-      version='1.0.4',
+      version='1.0.5',
       description='Singer.io tap for extracting data from the FullStory API',
       author='Stitch',
       url='http://singer.io',
