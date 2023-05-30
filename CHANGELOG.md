@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.5
+  * Dependabot update [#9](https://github.com/singer-io/tap-fullstory/pull/9)
+
 ## 1.0.4
   * Update version of `singer-python` to `1.9.1` to allow JSON serialisation of `Decimal` types
 
