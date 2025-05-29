@@ -159,7 +159,15 @@ def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     CONFIG.update(args.config)
     STATE.update(args.state)
-    do_sync()
+    if args.discover:
+        do_discover()
+    else:
+        do_sync()
+
+def do_discover():
+    LOGGER.info("Running in discovery mode")
+    schema = load_schema("events")
+    singer.write_schema("events", schema, [])
 
 
 if __name__ == "__main__":
