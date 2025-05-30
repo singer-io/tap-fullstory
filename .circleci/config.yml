@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.4-jessie-browsers
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
