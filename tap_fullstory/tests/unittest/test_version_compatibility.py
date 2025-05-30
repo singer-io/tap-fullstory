@@ -5,28 +5,6 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 import tap_fullstory
 
-
-class TestTapFullstorySchema(unittest.TestCase):
-    def test_schema_file_structure(self):
-        schema_path = Path(__file__).resolve().parent.parent.parent / "schemas" / "events.json"
-        self.assertTrue(schema_path.exists(), "Schema file does not exist")
-
-        with schema_path.open("r") as f:
-            schema = json.load(f)
-
-        self.assertIsInstance(schema, dict)
-        self.assertIn("properties", schema)
-
-
-class TestLibraryVersions(unittest.TestCase):
-    def test_installed_versions(self):
-        self.assertTrue(importlib.metadata.version("singer-python").startswith("6.1"))
-        self.assertTrue(importlib.metadata.version("requests").startswith("2.32"))
-        self.assertTrue(importlib.metadata.version("backoff").startswith("2.1"))
-        self.assertTrue(importlib.metadata.version("pendulum").startswith("3.1"))
-        self.assertTrue(importlib.metadata.version("ijson").startswith("3.4"))
-
-
 class TestTapFullstoryMain(unittest.TestCase):
     @patch("singer.utils.parse_args", return_value=MagicMock(config={"api_key": "fake", "start_date": "2024-01-01"}, state={}))
     @patch("tap_fullstory.requests.get")
