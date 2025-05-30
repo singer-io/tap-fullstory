@@ -154,6 +154,10 @@ def do_sync():
     sync_events()
     LOGGER.info("Completed sync")
 
+def do_discover():
+    LOGGER.info("Running in discovery mode")
+    schema = load_schema("events")
+    singer.write_schema("events", schema, [])
 
 def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
@@ -163,12 +167,6 @@ def main():
         do_discover()
     else:
         do_sync()
-
-def do_discover():
-    LOGGER.info("Running in discovery mode")
-    schema = load_schema("events")
-    singer.write_schema("events", schema, [])
-
 
 if __name__ == "__main__":
     main()
