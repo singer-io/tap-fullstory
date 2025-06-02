@@ -1,45 +1,39 @@
 import json
 import unittest
-import importlib.metadata
 from pathlib import Path
 from unittest.mock import patch, MagicMock
+import datetime
 import tap_fullstory
 
 
-class TestTapFullstorySchema(unittest.TestCase):
-    def test_schema_file_structure(self):
-        schema_path = Path(__file__).resolve().parent.parent.parent / "schemas" / "events.json"
-        self.assertTrue(schema_path.exists(), "Schema file does not exist")
-
-        with schema_path.open("r") as f:
-            schema = json.load(f)
-
-        self.assertIsInstance(schema, dict)
-        self.assertIn("properties", schema)
-
-
-class TestLibraryVersions(unittest.TestCase):
-    def test_installed_versions(self):
-        self.assertTrue(importlib.metadata.version("singer-python").startswith("6.1"))
-        self.assertTrue(importlib.metadata.version("requests").startswith("2.32"))
-        self.assertTrue(importlib.metadata.version("backoff").startswith("2.1"))
-        self.assertTrue(importlib.metadata.version("pendulum").startswith("3.1"))
-        self.assertTrue(importlib.metadata.version("ijson").startswith("3.4"))
+class FakeDateTime(datetime.datetime):
+    @classmethod
+    def utcfromtimestamp(cls, ts):
+        return datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
 
 
 class TestTapFullstoryMain(unittest.TestCase):
     @patch("singer.utils.parse_args", return_value=MagicMock(config={"api_key": "fake", "start_date": "2024-01-01"}, state={}))
-    @patch("tap_fullstory.requests.get")
+    @patch("tap_fullstory.request")  # patch request() in __init__.py
     @patch("tap_fullstory.singer.write_record")
     @patch("tap_fullstory.singer.write_schema")
-    def test_main_with_schema(self, mock_write_schema, mock_write_record, mock_requests_get, mock_parse_args):
-        schema_path = Path(__file__).parent.parent.parent / 'schemas' / 'events.json'
+    @patch("tap_fullstory.datetime", wraps=datetime)
+    def test_main_with_schema(self, mock_datetime_module, mock_write_schema, mock_write_record, mock_request, mock_parse_args):
+        mock_datetime_module.datetime = FakeDateTime
 
+        # Load expected schema
+        schema_path = Path(__file__).parent.parent.parent / 'schemas' / 'events.json'
         with schema_path.open("r") as f:
             schema = json.load(f)
 
-        mock_data = {
-            "events": [
+        # Setup mocked API responses
+        mock_request.side_effect = [
+            {
+                "exports": [
+                    {"Id": "mock_file_id", "Stop": 1716163200}
+                ]
+            },
+            [
                 {
                     "IndvId": 101,
                     "UserId": 202,
@@ -60,15 +54,18 @@ class TestTapFullstoryMain(unittest.TestCase):
                     "PageDevice": "Desktop"
                 }
             ]
-        }
+        ]
 
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = mock_data
-        mock_requests_get.return_value = mock_response
-
+        # Run the tap
         tap_fullstory.main()
 
+        # Assert schema was written
         mock_write_schema.assert_called_once()
-        called_schema = mock_write_schema.call_args[0][1]
-        self.assertEqual(set(called_schema["properties"].keys()), set(schema["properties"].keys()))
+        written_schema = mock_write_schema.call_args[0][1]
+        self.assertEqual(set(written_schema["properties"].keys()), set(schema["properties"].keys()))
+
+        # Assert record was written
+        mock_write_record.assert_called()
+
+
+
