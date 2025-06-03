@@ -1,21 +1,44 @@
 import unittest
-from unittest.mock import patch, MagicMock
-import tap_fullstory
+from unittest import mock
+from tap_fullstory.discover import discover
 
 class TestDiscoverMode(unittest.TestCase):
 
-    @patch("tap_fullstory.singer.write_schema")
-    @patch("tap_fullstory.load_schema")
-    @patch("tap_fullstory.LOGGER")
-    def test_do_discover(self, mock_logger, mock_load_schema, mock_write_schema):
-        # Arrange
-        mock_schema = {"type": "object", "properties": {"id": {"type": "string"}}}
-        mock_load_schema.return_value = mock_schema
-        tap_fullstory.do_discover()
+    @mock.patch("tap_fullstory.discover.get_schemas")
+    def test_discover_output_structure(self, mock_get_schemas):
+        # Mock schema and metadata
+        mock_get_schemas.return_value = (
+            {
+                "events": {
+                    "type": "object",
+                    "properties": {
+                        "EventStart": {"type": "string"},
+                        "UserId": {"type": "string"}
+                    }
+                }
+            },
+            {
+                "events": [
+                    {
+                        "metadata": {},
+                        "breadcrumb": [],
+                        "inclusion": "available"
+                    }
+                ]
+            }
+        )
 
-        mock_logger.info.assert_called_once_with("Running in discovery mode")
-        mock_load_schema.assert_called_once_with("events")
-        mock_write_schema.assert_called_once_with("events", mock_schema, [])
+        catalog = discover()
 
+        self.assertIn("streams", catalog)
+        self.assertEqual(len(catalog["streams"]), 1)
 
+        stream = catalog["streams"][0]
+        self.assertEqual(stream["stream"], "events")
+        self.assertIn("schema", stream)
+        self.assertIn("metadata", stream)
+        self.assertEqual(stream["tap_stream_id"], "events")
+        self.assertEqual(stream["key_properties"], ["UserId"])
 
+if __name__ == '__main__':
+    unittest.main()
