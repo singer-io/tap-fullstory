@@ -16,7 +16,8 @@ jobs:
           name: 'JSON Validator'
           command: |
             source /usr/local/share/virtualenvs/tap-tester/bin/activate
-            stitch-validate-json tap-fullstory/schemas/*.json
+            stitch-validate-json tap_fullstory/schemas/*.json
+
       - run:
           name: 'pylint'
           command: |
