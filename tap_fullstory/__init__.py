@@ -4,7 +4,8 @@ import os
 import time
 import re
 import io
-
+import json
+import sys
 import json
 import datetime
 import gzip
@@ -15,6 +16,7 @@ import pendulum
 import backoff
 import singer
 from singer import utils, metrics
+from tap_fullstory.discover import discover
 
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
@@ -155,9 +157,14 @@ def do_sync():
     LOGGER.info("Completed sync")
 
 def do_discover():
+<<<<<<< Updated upstream
     LOGGER.info("Running in discovery mode")
     schema = load_schema("events")
     singer.write_schema("events", schema, [])
+=======
+    catalog = discover()
+    json.dump(catalog, sys.stdout, indent=2)
+>>>>>>> Stashed changes
 
 def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
@@ -167,6 +174,10 @@ def main():
         do_discover()
     else:
         do_sync()
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 if __name__ == "__main__":
     main()
