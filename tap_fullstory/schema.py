@@ -32,17 +32,17 @@ def get_schemas():
         # Add standard metadata for replication, key properties, etc.
         mdata = metadata.get_standard_metadata(
             schema=schema,
-            key_properties=stream_metadata.get("key_properties", []),
-            valid_replication_keys=stream_metadata.get("replication_keys", []),
-            replication_method=stream_metadata.get("replication_method", None),
+            key_properties=getattr(stream_metadata, "key_properties", []),
+            valid_replication_keys=getattr(stream_metadata, "replication_keys", []),
+            replication_method=getattr(stream_metadata, "replication_method", None),
         )
 
         # Mark replication keys as "automatic" inclusion in metadata
         mdata_map = metadata.to_map(mdata)
         for field_name in schema.get("properties", {}).keys():
             if (
-                stream_metadata.get("replication_keys")
-                and field_name in stream_metadata["replication_keys"]
+                    getattr(stream_metadata, "replication_keys", None)
+                    and field_name in stream_metadata.replication_keys
             ):
                 mdata_map = metadata.write(
                     mdata_map,
@@ -50,6 +50,7 @@ def get_schemas():
                     "inclusion",
                     "automatic",
                 )
+
         # Convert back to list form for Singer
         mdata = metadata.to_list(mdata_map)
 
