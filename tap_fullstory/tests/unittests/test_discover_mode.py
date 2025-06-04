@@ -4,7 +4,7 @@ from tap_fullstory.discover import discover
 
 class TestDiscoverMode(unittest.TestCase):
 
-    @mock.patch("tap_fullstory.discover.get_schemas")
+    @mock.patch("tap_fullstory.schema.get_schemas")
     def test_discover_output_structure(self, mock_get_schemas):
         # Mock schema and metadata
         mock_get_schemas.return_value = (
