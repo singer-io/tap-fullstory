@@ -157,14 +157,8 @@ def do_sync():
     LOGGER.info("Completed sync")
 
 def do_discover():
-<<<<<<< Updated upstream
-    LOGGER.info("Running in discovery mode")
-    schema = load_schema("events")
-    singer.write_schema("events", schema, [])
-=======
     catalog = discover()
     json.dump(catalog, sys.stdout, indent=2)
->>>>>>> Stashed changes
 
 def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
@@ -174,10 +168,8 @@ def main():
         do_discover()
     else:
         do_sync()
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 if __name__ == "__main__":
     main()
+
+
