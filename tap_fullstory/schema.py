@@ -40,10 +40,8 @@ def get_schemas():
         # Mark replication keys as "automatic" inclusion in metadata
         mdata_map = metadata.to_map(mdata)
         for field_name in schema.get("properties", {}).keys():
-            if (
-                    getattr(stream_metadata, "replication_keys", None)
-                    and field_name in stream_metadata.replication_keys
-            ):
+            replication_keys = getattr(stream_metadata, "replication_keys", []) or []
+            if field_name in replication_keys:
                 mdata_map = metadata.write(
                     mdata_map,
                     ("properties", field_name),
