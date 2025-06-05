@@ -4,7 +4,8 @@ import os
 import time
 import re
 import io
-
+import json
+import sys
 import json
 import datetime
 import gzip
@@ -15,6 +16,7 @@ import pendulum
 import backoff
 import singer
 from singer import utils, metrics
+from tap_fullstory.discover import discover
 
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
@@ -154,13 +156,19 @@ def do_sync():
     sync_events()
     LOGGER.info("Completed sync")
 
+def do_discover():
+    catalog = discover()
+    json.dump(catalog, sys.stdout, indent=2)
 
 def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     CONFIG.update(args.config)
     STATE.update(args.state)
-    do_sync()
-
+    if args.discover:
+        do_discover()
+    else:
+        do_sync()
 
 if __name__ == "__main__":
     main()
+

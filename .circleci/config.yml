@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Setup virtual env'
+          name: 'Setup'
           command: |
             python3 -mvenv /usr/local/share/virtualenvs/tap-fullstory
             source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
@@ -56,4 +56,5 @@ workflows:
     jobs:
       - build:
           context: circleci-user
+
 
