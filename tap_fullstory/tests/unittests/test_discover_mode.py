@@ -40,4 +40,3 @@ class TestDiscoverMode(unittest.TestCase):
         self.assertEqual(stream["tap_stream_id"], "events")
         self.assertEqual(stream["key_properties"], ["UserId"])
 
-
