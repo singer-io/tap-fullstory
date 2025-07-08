@@ -17,3 +17,11 @@ jobs:
           command: |
             source ~/.virtualenvs/tap-fullstory/bin/activate
             pylint tap_fullstory --disable missing-docstring,logging-format-interpolation,too-many-locals,too-many-arguments
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build:
+          context:
+            - circleci-user
