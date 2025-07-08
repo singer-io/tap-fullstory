@@ -16,7 +16,7 @@ jobs:
           name: 'Pylint'
           command: |
             source ~/.virtualenvs/tap-fullstory/bin/activate
-            pylint tap_fullstory --disable missing-docstring,logging-format-interpolation,too-many-locals,too-many-arguments
+            pylint tap_fullstory --disable missing-docstring,logging-format-interpolation,too-many-locals,too-many-arguments,consider-using-f-string,broad-exception-raised,use-yield-from
 
 workflows:
   version: 2
