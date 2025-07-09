@@ -164,10 +164,14 @@ def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     CONFIG.update(args.config)
     STATE.update(args.state)
-    if args.discover:
-        do_discover()
-    else:
-        do_sync()
+    try:
+        if args.discover:
+            do_discover()
+        elif args.catalog:
+            do_sync(args)
+    except RuntimeError:
+        LOGGER.fatal("Run failed.")
+        exit(1)
 
 if __name__ == "__main__":
     main()
