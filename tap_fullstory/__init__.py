@@ -167,7 +167,7 @@ def main():
     if args.discover:
         do_discover()
     elif args.catalog:
-        do_sync(args)
+        do_sync()
 
 if __name__ == "__main__":
     main()
