@@ -11,8 +11,8 @@ setup(name='tap-fullstory',
       py_modules=['tap_fullstory'],
       install_requires=[
           'singer-python==1.9.1',
-          'requests==2.20.0',
-          'backoff==1.3.2',
+          'requests==2.32.4',
+          'backoff==1.8.0',
           'pendulum==1.2.0',
           'ijson==2.3'
       ],
