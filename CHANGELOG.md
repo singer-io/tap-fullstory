@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5
+  * Bump dependency versions for twistlock compliance
+  * Update circleci config to fix failing build
+  * [#13](https://github.com/singer-io/tap-fullstory/pull/13)
+
 ## 1.0.4
   * Update version of `singer-python` to `1.9.1` to allow JSON serialisation of `Decimal` types
 
