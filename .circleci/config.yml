@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -6,37 +6,42 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Setup'
+          name: "Setup virtual env"
           command: |
             python3 -mvenv /usr/local/share/virtualenvs/tap-fullstory
             source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
-            pip install -U 'pip==22.2.2' 'setuptools==65.3.0'
+            pip install -U "pip==22.2.2" "setuptools==65.3.0"
             pip install .[dev]
       - run:
-          name: 'JSON Validator'
+          name: "JSON Validator"
           command: |
-            source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
+            source /usr/local/share/virtualenvs/tap-tester/bin/activate
             stitch-validate-json tap_fullstory/schemas/*.json
-
       - run:
-          name: 'pylint'
+          name: "pylint"
           command: |
             source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
             pip install pylint
             pylint tap_fullstory -d C,R,W
       - add_ssh_keys
       - run:
-          name: 'Unit Tests'
+          name: "Unit Tests"
           command: |
             source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
             pip install nose coverage
-            nosetests --with-coverage --cover-erase --cover-package=tap_fullstory --cover-html-dir=htmlcov tap_fullstory/tests/unittests
+            nosetests --with-coverage --cover-erase --cover-package=tap_fullstory --cover-html-dir=htmlcov tests/unittests
             coverage html
       - store_test_results:
           path: test_output/report.xml
       - store_artifacts:
           path: htmlcov
-      - add_ssh_keys
+      - run:
+          name: "Integration Tests"
+          command: |
+            aws s3 cp s3://com-stitchdata-dev-deployment-assets/environments/tap-tester/tap_tester_sandbox dev_env.sh
+            source dev_env.sh
+            source /usr/local/share/virtualenvs/tap-tester/bin/activate
+            run-test --tap=tap-fullstory tests
 
 
 workflows:
@@ -48,7 +53,7 @@ workflows:
   build_daily:
     triggers:
       - schedule:
-          cron: "0 0 * * *"
+          cron: "0 19 * * *"
           filters:
             branches:
               only:
@@ -56,5 +61,3 @@ workflows:
     jobs:
       - build:
           context: circleci-user
-
-

@@ -1,29 +1,39 @@
 import singer
-from tap_fullstory.streams import STREAMS
+from singer import metadata
+from singer.catalog import Catalog, CatalogEntry, Schema
 from tap_fullstory.schema import get_schemas
 
 LOGGER = singer.get_logger()
 
 
-def discover():
+def discover() -> Catalog:
     """
-    Run the discover mode, prepare the catalog file and return the catalog
+    Run the discovery mode, prepare the catalog file and return the catalog.
     """
-
     schemas, field_metadata = get_schemas()
-    streams = []
+    catalog = Catalog([])
 
     for stream_name, schema_dict in schemas.items():
-        mdata = field_metadata[stream_name]
+        try:
+            schema = Schema.from_dict(schema_dict)
+            mdata = field_metadata[stream_name]
+        except Exception as err:
+            LOGGER.error(err)
+            LOGGER.error("stream_name: {}".format(stream_name))
+            LOGGER.error("type schema_dict: {}".format(type(schema_dict)))
+            raise err
 
-        catalog_entry = {
-            "stream": stream_name,
-            "tap_stream_id": stream_name,
-            "key_properties": STREAMS[stream_name].key_properties,
-            "schema": singer.resolve_schema_references(schema_dict),
-            "metadata": mdata,
-        }
+        key_properties = metadata.to_map(mdata).get((), {}).get("table-key-properties")
 
-        streams.append(catalog_entry)
+        catalog.streams.append(
+            CatalogEntry(
+                stream=stream_name,
+                tap_stream_id=stream_name,
+                key_properties=key_properties,
+                schema=schema,
+                metadata=mdata,
+            )
+        )
 
-    return {"streams": streams}
+    return catalog
+
