@@ -1,1 +1,72 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "enabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "consoleWatcher": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "ajaxWatcher": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "resourceUploading": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "recordingShutoff": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "clientSideRageClick": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        }
+    }
+}

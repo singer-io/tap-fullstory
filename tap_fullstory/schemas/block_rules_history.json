@@ -1,1 +1,69 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "blockedIps": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "string"
+                ]
+            }
+        },
+        "blockedUas": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "string"
+                ]
+            }
+        },
+        "blockedAppIds": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "string"
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        }
+    }
+}

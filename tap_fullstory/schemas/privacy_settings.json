@@ -1,1 +1,75 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "selector": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "consent": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "notes": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "scope": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "lastUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "label": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "targetingConditions": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "editable": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "exceptionSelectors": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "string"
+            }
+        },
+        "groupId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        }
+    }
+}

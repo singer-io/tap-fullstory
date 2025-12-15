@@ -1,1 +1,31 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "lastUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "lastUpdatedBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "created": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        }
+    }
+}
