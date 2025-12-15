@@ -5,6 +5,6 @@ class Segments(IncrementalStream):
     key_properties = ["id"]
     replication_method = "INCREMENTAL"
     replication_keys = ["created"]
-    data_key = "versions"
+    data_key = "segments"
     path = "/segments/v1"
 
