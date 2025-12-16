@@ -1,31 +1,71 @@
 {
     "type": "object",
     "properties": {
-        "lastUpdated": {
+        "onlyRecordKnownDomains": {
             "type": [
                 "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "lastUpdatedBy": {
-            "type": [
-                "null",
-                "string"
+                "boolean"
             ]
         },
-        "created": {
+        "domains": {
             "type": [
                 "null",
-                "string"
+                "array"
             ],
-            "format": "date-time"
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ],
+                "properties": {
+                    "disabled": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "domain": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    }
+                }
+            }
         },
-        "createdBy": {
+        "metadata": {
             "type": [
                 "null",
-                "string"
-            ]
+                "object"
+            ],
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
         }
     }
 }

@@ -1,31 +1,57 @@
 {
     "type": "object",
     "properties": {
-        "lastUpdated": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "lastUpdatedBy": {
+        "recordGeoMode": {
             "type": [
                 "null",
                 "string"
             ]
         },
-        "created": {
+        "recordGeoZones": {
             "type": [
                 "null",
-                "string"
+                "array"
             ],
-            "format": "date-time"
+            "items": {
+                "type": [
+                    "null",
+                    "string"
+                ]
+            }
         },
-        "createdBy": {
+        "metadata": {
             "type": [
                 "null",
-                "string"
-            ]
+                "object"
+            ],
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
         }
     }
 }

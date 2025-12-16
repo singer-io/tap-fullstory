@@ -1,31 +1,51 @@
 {
     "type": "object",
     "properties": {
-        "lastUpdated": {
+        "sessionTargetingRules": {
             "type": [
                 "null",
-                "string"
+                "array"
             ],
-            "format": "date-time"
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
-        "lastUpdatedBy": {
+        "metadata": {
             "type": [
                 "null",
-                "string"
-            ]
-        },
-        "created": {
-            "type": [
-                "null",
-                "string"
+                "object"
             ],
-            "format": "date-time"
-        },
-        "createdBy": {
-            "type": [
-                "null",
-                "string"
-            ]
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
         }
     }
 }

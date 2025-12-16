@@ -31,7 +31,10 @@
                 "array"
             ],
             "items": {
-                "type": "string"
+                "type": [
+                    "null",
+                    "string"
+                ]
             }
         },
         "metadata": {
