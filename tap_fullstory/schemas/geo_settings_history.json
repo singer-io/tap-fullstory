@@ -19,6 +19,26 @@
                 ]
             }
         },
+        "lastUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "created": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "metadata": {
             "type": [
                 "null",

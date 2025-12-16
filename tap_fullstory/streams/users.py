@@ -7,4 +7,3 @@ class Users(FullTableStream):
     data_key = "results"
     path = "/v2/users"
     children = ["user"]
-
