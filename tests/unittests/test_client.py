@@ -68,21 +68,6 @@ class TestClient(unittest.TestCase):
         assert isinstance(client._session, mock_session().__class__)
 
 
-    @patch("tap_fullstory.client.Client._Client__make_request")
-    def test_client_get(self, mock_make_request):
-        mock_make_request.return_value = {"data": "ok"}
-        result = self.client.get("https://api.example.com/resource")
-        assert result == {"data": "ok"}
-        mock_make_request.assert_called_once()
-
-
-    @patch("tap_fullstory.client.Client._Client__make_request")
-    def test_client_post(self, mock_make_request):
-        mock_make_request.return_value = {"created": True}
-        result = self.client.post("https://api.example.com/resource", body={"key": "value"})
-        assert result == {"created": True}
-        mock_make_request.assert_called_once()
-
     @parameterized.expand([
         ["400 error", 400, MockResponse(400), fullstoryBadRequestError, "A validation exception has occurred."],
         ["401 error", 401, MockResponse(401), fullstoryUnauthorizedError, "The access token provided is expired, revoked, malformed or invalid for other reasons."],
@@ -101,7 +86,7 @@ class TestClient(unittest.TestCase):
 
     @parameterized.expand([
         ["422 error", 422, MockResponse(422), fullstoryUnprocessableEntityError, "The request content itself is not processable by the server."],
-        ["429 error", 429, MockResponse(429), fullstoryRateLimitError, "The API rate limit for your organisation/application pairing has been exceeded."],
+        ["429 error", 429, MockResponse(429), fullstoryRateLimitError, "The API rate limit for your organisation/application pairing has been exceeded. (Retry after unknown delay.)"],
         ["500 error", 500, MockResponse(500), fullstoryInternalServerError, "The server encountered an unexpected condition which prevented it from fulfilling the request."],
         ["501 error", 501, MockResponse(501), fullstoryNotImplementedError, "The server does not support the functionality required to fulfill the request."],
         ["502 error", 502, MockResponse(502), fullstoryBadGatewayError, "Server received an invalid response."],

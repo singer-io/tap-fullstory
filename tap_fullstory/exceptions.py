@@ -45,21 +45,18 @@ class fullstoryRateLimitError(fullstoryBackoffError):
         self.response = response
 
         # Retry-After header parsing
-        retry_after = None
-        if response and hasattr(response, 'headers'):
+        self.retry_after = None
+        if response and getattr(response, 'headers', None):
             raw_retry = response.headers.get('Retry-After')
             if raw_retry:
                 try:
-                    retry_after = int(raw_retry)
+                    self.retry_after = int(raw_retry)
                 except ValueError:
-                    retry_after = None
+                    self.retry_after = None
 
-        self.retry_after = retry_after
         base_msg = message or "Rate limit hit"
-        retry_info = f"(Retry after {self.retry_after} seconds.)" \
-            if self.retry_after is not None else "(Retry after unknown delay.)"
-        full_message = f"{base_msg} {retry_info}"
-        super().__init__(full_message, response=response)
+        retry_info = f"(Retry after {self.retry_after} seconds.)" if self.retry_after is not None else "(Retry after unknown delay.)"
+        super().__init__(f"{base_msg} {retry_info}", response=response)
 
 class fullstoryInternalServerError(fullstoryBackoffError):
     """class representing 500 status code."""
