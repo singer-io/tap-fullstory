@@ -15,4 +15,3 @@ class fullstoryAutomaticFields(MinimumSelectionTest, fullstoryBaseTest):
     def streams_to_test(self):
         streams_to_exclude = {}
         return self.expected_stream_names().difference(streams_to_exclude)
-

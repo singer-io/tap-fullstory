@@ -1,5 +1,5 @@
 from tap_fullstory.streams.abstracts import IncrementalStream
-from typing import Dict, Iterator
+from typing import Dict
 
 class BlockRulesHistory(IncrementalStream):
     tap_stream_id = "block_rules_history"
@@ -15,4 +15,6 @@ class BlockRulesHistory(IncrementalStream):
         """
         if record:
             record["lastUpdated"] = record.get("metadata").get("lastUpdated")
+            record["created"] = record.get("metadata").get("created")
+            record["createdBy"] = record.get("metadata").get("createdBy")
         return record

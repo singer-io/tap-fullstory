@@ -66,4 +66,3 @@ class fullstoryDiscoveryTest(DiscoveryTest, fullstoryBaseTest):
                     self.assertEqual(expected_parent_tap_stream_id, actual_parent_tap_stream_id,
                                         logging=f"verify {expected_parent_tap_stream_id} "
                                                 f"is saved in metadata as a parent-tap-stream-id")
-
