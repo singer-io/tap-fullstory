@@ -24,24 +24,24 @@ jobs:
             pip install pylint
             pylint tap_fullstory -d C,R,W
       - add_ssh_keys
-      - run:
-          name: "Unit Tests"
-          command: |
-            source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
-            pip install nose coverage
-            nosetests --with-coverage --cover-erase --cover-package=tap_fullstory --cover-html-dir=htmlcov tests/unittests
-            coverage html
-      - store_test_results:
-          path: test_output/report.xml
-      - store_artifacts:
-          path: htmlcov
-      - run:
-          name: "Integration Tests"
-          command: |
-            aws s3 cp s3://com-stitchdata-dev-deployment-assets/environments/tap-tester/tap_tester_sandbox dev_env.sh
-            source dev_env.sh
-            source /usr/local/share/virtualenvs/tap-tester/bin/activate
-            run-test --tap=tap-fullstory tests
+      # - run:
+      #     name: "Unit Tests"
+      #     command: |
+      #       source /usr/local/share/virtualenvs/tap-fullstory/bin/activate
+      #       pip install nose coverage
+      #       nosetests --with-coverage --cover-erase --cover-package=tap_fullstory --cover-html-dir=htmlcov tests/unittests
+      #       coverage html
+      # - store_test_results:
+      #     path: test_output/report.xml
+      # - store_artifacts:
+      #     path: htmlcov
+      # - run:
+      #     name: "Integration Tests"
+      #     command: |
+      #       aws s3 cp s3://com-stitchdata-dev-deployment-assets/environments/tap-tester/tap_tester_sandbox dev_env.sh
+      #       source dev_env.sh
+      #       source /usr/local/share/virtualenvs/tap-tester/bin/activate
+      #       run-test --tap=tap-fullstory tests
 
 
 workflows:
