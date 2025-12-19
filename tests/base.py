@@ -138,17 +138,12 @@ class fullstoryBaseTest(BaseCase):
             credentials_dict[cred] = os.getenv(creds[cred])
 
         return credentials_dict
-
+    
     def get_properties(self, original: bool = True):
         """Configuration of properties required for the tap."""
-        return_value = {
-            "start_date": "2022-01-01T00:00:00Z"
+        return {
+            "start_date": self.start_date
         }
-        if original:
-            return return_value
-
-        return_value["start_date"] = self.start_date
-        return return_value
 
     def expected_parent_tap_stream(self, stream=None):
         """return a dictionary with key of table name and value of parent stream"""
