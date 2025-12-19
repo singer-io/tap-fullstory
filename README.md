@@ -99,7 +99,7 @@ This tap:
 **[segments](https://developer.fullstory.com/server/v1/segments/list-segments/)**
 - Data Key = versions
 - Primary keys: ['id']
-- Replication strategy: INCREMENTAL
+- Replication strategy: FULL_TABLE
 
 
 
