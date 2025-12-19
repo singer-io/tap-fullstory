@@ -1,0 +1,194 @@
+{
+    "tap_name": "fullstory",
+    "required_config_keys": [
+        "api_key",
+        "start_date"
+    ],
+    "page_size": 100,
+    "next_page_key": "next_pagination_token",
+    "pagination_key": "paginationToken",
+    "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+    "params": {"page_limit": 100},
+    "auth_header_key": "Authorization",
+    "auth_config_key": "api_key",
+    "base_url": "https://api.fullstory.com",
+    "streams": [
+        {
+            "name": "users",
+            "key_properties": "id",
+            "replication_method": "FULL_TABLE",
+            "replication_keys": null,
+            "data_key": "results",
+            "path": "/v2/users",
+            "parent": null,
+            "children": ["user"],
+            "doc_link": "https://developer.fullstory.com/server/users/list-users/"
+        },
+        {
+            "name": "user",
+            "key_properties": "id",
+            "replication_method": "FULL_TABLE",
+            "replication_keys": null,
+            "data_key": null,
+            "path": "/v2/users/{id}",
+            "parent": "users",
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/users/get-user/"
+        },
+        {
+            "name": "block_rules",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": null,
+            "path": "/settings/recording/v1/blocking",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-recording-block-rules/"
+        },
+        {
+            "name": "block_rules_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/blocking/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-recording-block-rules-history/"
+        },
+        {
+            "name": "domain_settings_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/domain/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-domain-settings-history/"
+        },
+        {
+            "name": "domain_settings",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": null,
+            "path": "/settings/recording/v1/domain",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-domain-settings/"
+        },
+        {
+            "name": "geo_settings_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/geo/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-geo-settings-history/"
+        },
+        {
+            "name": "privacy_settings",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": null,
+            "path": "/settings/recording/v1/privacy",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-privacy-settings/"
+        },
+        {
+            "name": "privacy_settings_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/privacy/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-privacy-settings/"
+        },
+        {
+            "name": "recording_features",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": null,
+            "path": "/settings/recording/v1/features",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-recording-features/"
+        },
+        {
+            "name": "recording_features_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/features/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-recording-features-history/"
+        },
+        {
+            "name": "target_rule_history",
+            "key_properties": ["created", "createdBy", "lastUpdated"],
+            "replication_method": "INCREMENTAL",
+            "replication_keys": [
+                "lastUpdated"
+            ],
+            "data_key": "versions",
+            "path": "/settings/recording/v1/targeting/history",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/settings/get-targeting-settings-history/"
+        },
+        {
+            "name": "segments",
+            "key_properties": [
+                "id"
+            ],
+            "replication_method": "FULL_TABLE",
+            "replication_keys": null,
+            "data_key": "segments",
+            "path": "/segments/v1",
+            "parent": null,
+            "children": [],
+            "doc_link": "https://developer.fullstory.com/server/v1/segments/list-segments/"
+        }
+    ],
+    "tap_tester_creds": {
+        "api_key": "TAP_FULLSTORY_API_KEY"
+    },
+    "author": "Stitch",
+    "third_party_dependencies": [
+        "singer-python==6.1.1",
+        "requests==2.32.4",
+        "backoff==2.2.1"
+    ]
+}
