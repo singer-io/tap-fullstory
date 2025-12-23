@@ -13,7 +13,7 @@ class User(FullTableStream):
         """Prepare URL endpoint for child streams."""
         if not parent_obj or 'id' not in parent_obj:
             raise ValueError("parent_obj must be provided with an 'id' key.")
-        return f"{self.client.base_url}/{self.path.format(id = parent_obj['id'])}"
+        return f"{self.client.base_url}/{self.path.format(id=parent_obj['id'])}"
 
     def get_records(self) -> Iterator[Dict]:
 

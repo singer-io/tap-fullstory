@@ -39,7 +39,7 @@ class fullstoryUnprocessableEntityError(fullstoryBackoffError):
 class fullstoryRateLimitError(fullstoryBackoffError):
     """class representing 429 status code."""
     def __init__(self, message=None, response=None):
-        """Initialize the Amazon_AdsRateLimitError. Parses the 'Retry-After' header from the response (if present) and sets the
+        """Initialize the fullstoryRateLimitError. Parses the 'Retry-After' header from the response (if present) and sets the
             `retry_after` attribute accordingly.
         """
         self.response = response
