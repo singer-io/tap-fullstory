@@ -1,0 +1,91 @@
+{
+    "type": "object",
+    "properties": {
+        "onlyRecordKnownDomains": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "domains": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ],
+                "properties": {
+                    "disabled": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "domain": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    }
+                }
+            }
+        },
+        "lastUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "created": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "metadata": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        }
+    }
+}

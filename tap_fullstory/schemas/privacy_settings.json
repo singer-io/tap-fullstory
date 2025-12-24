@@ -1,0 +1,208 @@
+{
+    "type": "object",
+    "properties": {
+        "elementBlocks": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ],
+                "properties": {
+                    "selector": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "consent": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "notes": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "scope": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "lastUpdated": {
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "label": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "targetingConditions": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    },
+                    "editable": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "exceptionSelectors": {
+                        "type": [
+                            "null",
+                            "array"
+                        ],
+                        "items": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    },
+                    "groupId": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                }
+            }
+        },
+        "ajaxWatches": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ],
+                "properties": {
+                    "urlRegex": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "recordReq": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "recordRsp": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "whitelistReq": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "whitelistRsp": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    }
+                }
+            }
+        },
+        "discardIpAddresses": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "defaultPrivacyMode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "elementRuleGroups": {
+            "type": [
+                "null",
+                "object"
+            ]
+        },
+        "lastUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "created": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "metadata": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "lastUpdated": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "lastUpdatedBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "created": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        }
+    }
+}

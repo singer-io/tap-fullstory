@@ -1,0 +1,76 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "uid": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "display_name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "email": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "is_being_deleted": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "pricing_plan": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "popup_help": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "total_spent": {
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                }
+            }
+        },
+        "schema": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "type_conflicts": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "app_url": {
+            "type": [
+                "null",
+                "string"
+            ]
+        }
+    }
+}
