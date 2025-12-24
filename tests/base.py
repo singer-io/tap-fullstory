@@ -35,14 +35,14 @@ class fullstoryBaseTest(BaseCase):
         """The expected streams and metadata about the streams."""
         return {
             "users": {
-                cls.PRIMARY_KEYS: { "i", "d" },
+                cls.PRIMARY_KEYS: { "id" },
                 cls.REPLICATION_METHOD: cls.FULL_TABLE,
                 cls.REPLICATION_KEYS: set(),
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100,
             },
             "user": {
-                cls.PRIMARY_KEYS: { "i", "d" },
+                cls.PRIMARY_KEYS: { "id" },
                 cls.REPLICATION_METHOD: cls.FULL_TABLE,
                 cls.REPLICATION_KEYS: set(),
                 cls.OBEYS_START_DATE: False,
@@ -121,8 +121,8 @@ class fullstoryBaseTest(BaseCase):
             },
             "segments": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.INCREMENTAL,
-                cls.REPLICATION_KEYS: { "created" },
+                cls.REPLICATION_METHOD: cls.FULL_TABLE,
+                cls.REPLICATION_KEYS: set(),
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100,
             }
@@ -132,23 +132,18 @@ class fullstoryBaseTest(BaseCase):
     def get_credentials():
         """Authentication information for the test account."""
         credentials_dict = {}
-        creds = {'api_token': 'TAP_FULLSTORY_API_KEY'}
+        creds = {'api_key': 'TAP_FULLSTORY_API_KEY'}
 
         for cred in creds:
             credentials_dict[cred] = os.getenv(creds[cred])
 
         return credentials_dict
-
+    
     def get_properties(self, original: bool = True):
         """Configuration of properties required for the tap."""
-        return_value = {
-            "start_date": "2022-07-01T00:00:00Z"
+        return {
+            "start_date": self.start_date
         }
-        if original:
-            return return_value
-
-        return_value["start_date"] = self.start_date
-        return return_value
 
     def expected_parent_tap_stream(self, stream=None):
         """return a dictionary with key of table name and value of parent stream"""

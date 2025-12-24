@@ -38,7 +38,25 @@ class fullstoryUnprocessableEntityError(fullstoryBackoffError):
 
 class fullstoryRateLimitError(fullstoryBackoffError):
     """class representing 429 status code."""
-    pass
+    def __init__(self, message=None, response=None):
+        """Initialize the fullstoryRateLimitError. Parses the 'Retry-After' header from the response (if present) and sets the
+            `retry_after` attribute accordingly.
+        """
+        self.response = response
+
+        # Retry-After header parsing
+        self.retry_after = None
+        if response and getattr(response, 'headers', None):
+            raw_retry = response.headers.get('Retry-After')
+            if raw_retry:
+                try:
+                    self.retry_after = int(raw_retry)
+                except ValueError:
+                    self.retry_after = None
+
+        base_msg = message or "Rate limit hit"
+        retry_info = f"(Retry after {self.retry_after} seconds.)" if self.retry_after is not None else "(Retry after unknown delay.)"
+        super().__init__(f"{base_msg} {retry_info}", response=response)
 
 class fullstoryInternalServerError(fullstoryBackoffError):
     """class representing 500 status code."""

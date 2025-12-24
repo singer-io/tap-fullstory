@@ -29,13 +29,13 @@ class BaseStream(ABC):
     url_endpoint = ""
     path = ""
     page_size = 100
-    next_page_key = "next_pagination_token"
+    next_page_key = "nextPaginationToken"
     headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
     children = []
     parent = ""
     data_key = ""
     parent_bookmark_key = ""
-    http_method = "POST"
+    http_method = "GET"
 
     def __init__(self, client=None, catalog=None) -> None:
         self.client = client
@@ -43,7 +43,7 @@ class BaseStream(ABC):
         self.schema = catalog.schema.to_dict()
         self.metadata = metadata.to_map(catalog.metadata)
         self.child_to_sync = []
-        self.params = {'page_limit': 100}
+        self.params = {'limit': self.page_size}
         self.data_payload = {}
 
     @property
@@ -99,22 +99,31 @@ class BaseStream(ABC):
 
     def get_records(self) -> Iterator:
         """Interacts with api client interaction and pagination."""
-        self.params["paginationToken"] = self.page_size
-        next_page = 1
-        while next_page:
+        pagination_token = None
+        last_token = object()
+
+        while pagination_token != last_token:
+            params = dict(self.params)
+            if pagination_token:
+                params["paginationToken"] = pagination_token
+
             response = self.client.make_request(
                 self.http_method,
                 self.url_endpoint,
-                self.params,
+                params,
                 self.headers,
                 body=json.dumps(self.data_payload),
                 path=self.path
             )
-            raw_records = response.get(self.data_key, [])
-            next_page = response.get(self.next_page_key)
 
-            self.params[self.next_page_key] = next_page
-            yield from raw_records
+            yield from response.get(self.data_key, [])
+
+            last_token = pagination_token
+            pagination_token = response.get(self.next_page_key)
+
+            if not pagination_token:
+                break
+
 
     def write_schema(self) -> None:
         """

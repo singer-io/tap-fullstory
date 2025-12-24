@@ -12,12 +12,17 @@ class fullstoryInterruptedSyncTest(InterruptedSyncTest, fullstoryBaseTest):
         return "tap_tester_fullstory_interrupted_sync_test"
 
     def streams_to_test(self):
-        return self.expected_stream_names()
-
+        streams_to_exclude = {
+            # Unsupported Full-Table Streams
+            'segments',
+            'users',
+            'user'
+        }
+        return self.expected_stream_names().difference(streams_to_exclude)
 
     def manipulate_state(self):
         return {
-            "currently_syncing": "prospects",
+            "currently_syncing": "block_rules",
             "bookmarks": {
                 "block_rules": { "lastUpdated" : "2020-01-01T00:00:00Z"},
                 "block_rules_history": { "lastUpdated" : "2020-01-01T00:00:00Z"},
@@ -29,7 +34,5 @@ class fullstoryInterruptedSyncTest(InterruptedSyncTest, fullstoryBaseTest):
                 "recording_features": { "lastUpdated" : "2020-01-01T00:00:00Z"},
                 "recording_features_history": { "lastUpdated" : "2020-01-01T00:00:00Z"},
                 "target_rule_history": { "lastUpdated" : "2020-01-01T00:00:00Z"},
-                "segments": { "created" : "2020-01-01T00:00:00Z"},
         }
     }
-
