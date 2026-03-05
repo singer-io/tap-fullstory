@@ -1,7 +1,13 @@
 # Changelog
 
 ## 2.0.0
-  * Added discovery support to the tap [#16](https://github.com/singer-io/tap-fullstory/pull/16)
+  * Add discovery mode with schema and stream support
+  * Refactor tap architecture with new stream classes and client implementation
+  * Add sync logic for incremental and full table replication
+  * Add new streams: users, segments, privacy settings, recording features, and domain settings
+  * Add comprehensive unit tests and integration tests
+  * Add exception handling and backoff retry logic
+  * [#16](https://github.com/singer-io/tap-fullstory/pull/16)
 
 ## 1.0.5
   * Bump dependency versions for twistlock compliance
