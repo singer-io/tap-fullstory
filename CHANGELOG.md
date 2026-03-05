@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.0
+  * Added discovery support to the tap [#16](https://github.com/singer-io/tap-fullstory/pull/16)
+
 ## 1.0.5
   * Bump dependency versions for twistlock compliance
   * Update circleci config to fix failing build
