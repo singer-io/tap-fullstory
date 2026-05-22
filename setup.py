@@ -14,8 +14,12 @@ setup(name="tap-fullstory",
         "singer-python==6.1.1",
         "requests==2.32.4",
         "backoff==2.2.1",
-        "parameterized"
       ],
+      extras_require={
+        "dev": [
+          "parameterized",
+        ],
+      },
       entry_points="""
           [console_scripts]
           tap-fullstory=tap_fullstory:main
