@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 
 setup(name="tap-fullstory",
-      version="2.0.0",
+      version="2.0.1",
       description="Singer.io tap for extracting data from fullstory API",
       author="Stitch",
       url="http://singer.io",
@@ -12,7 +12,7 @@ setup(name="tap-fullstory",
       py_modules=["tap_fullstory"],
       install_requires=[
         "singer-python==6.1.1",
-        "requests==2.32.4",
+        "requests==2.33.0",
         "backoff==2.2.1",
         "parameterized"
       ],
