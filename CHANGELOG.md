@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.0.1
+  * Bump requests to 2.33.0 for security updates [#22](https://github.com/singer-io/tap-fullstory/pull/22)
+
+
 ## 2.0.0
   * Add discovery mode with schema and stream support
   * Refactor tap architecture with new stream classes and client implementation
